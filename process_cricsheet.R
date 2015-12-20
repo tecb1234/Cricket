@@ -7,6 +7,26 @@ library(stringr)
 
 data <- yaml.load_file("C:/Users/Thomas/Documents/Analysis/Cricket/Cricsheet data/630951.yaml")
 
+
+
+#deal with match info data
+files <- list.files("Cricsheet data")
+files <- files[1:(length(files)-1)]
+
+files_df <- data.frame(files)
+
+yaml_files <- lapply(paste("Cricsheet data/", files_df$files, sep=""), yaml.load_file)
+
+extract_info_df <- function(yaml_file){
+  info_df <- as.data.frame(yaml_file$info)
+  return <- info_df
+}
+    
+info_dfs <- lapply(yaml_files, extract_info_df)
+
+combined_info_df <- rbind_all(info_dfs)
+
+
 # convert the first innings data into a list of dataframes, one for each ball
 first_innings <- lapply(data$innings[[1]]$`1st innings`$deliveries,as.data.frame)
 
