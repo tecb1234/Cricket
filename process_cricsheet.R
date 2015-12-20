@@ -48,12 +48,3 @@ first_innings_df <- first_innings %>%
 
 
 
-df <- z %>%
-  bind_rows() %>%
-  as.data.frame()
-
-
-
-x<-as.data.frame(data$innings[[1]])
-
-
