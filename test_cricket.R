@@ -1,6 +1,6 @@
 library(testthat)
 
-source("process_cricsheet.R")
+#source("process_cricsheet.R")
 
 test_that("City to Country mapping", {
     
@@ -13,4 +13,8 @@ test_that("string manipulations", {
   expect_equal("file", get_filename("folder/file.yaml"))
 })
 
-
+test_that("home, away and neutral manipulations",{
+  expect_equal(c("home", "away"), check_neutral(c("home", "away")))
+  expect_equal(c("away", "home"), check_neutral(c("away", "home")))
+  expect_equal(c("neutral","neutral"), check_neutral(c("away", "away")))
+})
