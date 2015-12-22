@@ -20,14 +20,42 @@ files <- files[1:(length(files)-1)]
 files_df <- data.frame(files)
 
 #read in all the yaml files
-yaml_files <- lapply(paste("Cricsheet data/", files_df$files, sep=""), yaml.load_file)
+yaml_files <- lapply(paste("Cricsheet data/", files_df$files, sep=""), get_yaml_file)
+
+get_yaml_file <- function(filepath){
+  # a wrapper function for yaml.load_file, which adds an id value to the list object
+  
+  match_id <- get_filename(filepath)
+  yaml_file <- yaml.load_file(filepath)
+  yaml_file$match_id <- match_id
+  return <- yaml_file
+}
+
+get_filename <- function(filepath){
+  #this function extracts the filename from the filepath, in this case the bit between the '/' and the '.'
+  
+  #position of '/'
+  slash_pos <- str_locate(filepath, '/')[[1]]
+  
+  #position of '.'
+  dot_pos <- str_locate(filepath, '\\.')[[1]]
+  
+  return <- str_sub(filepath, slash_pos + 1, dot_pos-1)
+  
+}
 
 #for these purposes we are only interested in the $info part of each file
 extract_info_df <- function(yaml_file){
   # this function takes the $info part of the file and turns it into a dataframe
   info_df <- as.data.frame(yaml_file$info)
+  
+  #add the filename as an id variable and call it a match_id
+  match_id <- yaml_file$match_id
+  match_id_col <- rep(match_id, nrow(info_df))
+  info_df <- cbind(match_id_col, info_df)
   return <- info_df
 }
+
 
 #apply the extract_info_df function to every file and then rbind them into 1 big dataframe
 info_dfs <- lapply(yaml_files, extract_info_df)
@@ -57,6 +85,15 @@ cities_revised <- cities_revised %>%
 
 combined_info_df <- cities_revised %>%
     left_join(combined_info_df)
+
+#work out home and away teams
+combined_info_df <- combined_info_df %>%
+    mutate(home_away = ifelse(country == teams, "home", "away"))
+
+# but if both teams are away then in reality they are both neutral
+combined_info_df <- combined_info_df %>%
+    group_by(city, dates) %>%
+    mutate
 
 
 #### deal with the ball-by-ball data from each match
