@@ -20,17 +20,6 @@ files <- files[1:(length(files)-1)]
 files_df <- data.frame(files)
 
 #read in all the yaml files
-yaml_files <- lapply(paste("Cricsheet data/", files_df$files, sep=""), get_yaml_file)
-
-get_yaml_file <- function(filepath){
-  # a wrapper function for yaml.load_file, which adds an id value to the list object
-  
-  match_id <- get_filename(filepath)
-  yaml_file <- yaml.load_file(filepath)
-  yaml_file$match_id <- match_id
-  return <- yaml_file
-}
-
 get_filename <- function(filepath){
   #this function extracts the filename from the filepath, in this case the bit between the '/' and the '.'
   
@@ -43,6 +32,16 @@ get_filename <- function(filepath){
   return <- str_sub(filepath, slash_pos + 1, dot_pos-1)
   
 }
+get_yaml_file <- function(filepath){
+  # a wrapper function for yaml.load_file, which adds an id value to the list object
+  
+  match_id <- get_filename(filepath)
+  yaml_file <- yaml.load_file(filepath)
+  yaml_file$match_id <- match_id
+  return <- yaml_file
+}
+yaml_files <- lapply(paste("Cricsheet data/", files_df$files, sep=""), get_yaml_file)
+
 
 #for these purposes we are only interested in the $info part of each file
 extract_info_df <- function(yaml_file){
