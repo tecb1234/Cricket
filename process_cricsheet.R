@@ -53,6 +53,7 @@ extract_info_df <- function(yaml_file){
   match_id <- yaml_file$match_id
   match_id_col <- rep(match_id, nrow(info_df))
   info_df <- cbind(match_id_col, info_df)
+  rename(info_df, match_id = match_id_col)
   return <- info_df
 }
 
@@ -60,6 +61,8 @@ extract_info_df <- function(yaml_file){
 #apply the extract_info_df function to every file and then rbind them into 1 big dataframe
 info_dfs <- lapply(yaml_files, extract_info_df)
 combined_info_df <- rbind_all(info_dfs)
+
+
 
 #work out the country from the city
 # need to be slightly clever about it, as the API call takes ages
@@ -92,7 +95,7 @@ combined_info_df <- combined_info_df %>%
 
 # but if both teams are away then in reality they are both neutral
 combined_info_df <- combined_info_df %>%
-    group_by(city, dates) %>%
+    group_by(match_id) %>%
     mutate
 
 
