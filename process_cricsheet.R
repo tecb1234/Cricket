@@ -11,21 +11,29 @@ data <- yaml.load_file("C:/Users/Thomas/Documents/Analysis/Cricket/Cricsheet dat
 
 
 #### deal with match info data
+#extract the file names from the data folder
 files <- list.files("Cricsheet data")
+
+# the final file is the readme, we don't want that
 files <- files[1:(length(files)-1)]
 
 files_df <- data.frame(files)
 
+#read in all the yaml files
 yaml_files <- lapply(paste("Cricsheet data/", files_df$files, sep=""), yaml.load_file)
 
+#for these purposes we are only interested in the $info part of each file
 extract_info_df <- function(yaml_file){
+  # this function takes the $info part of the file and turns it into a dataframe
   info_df <- as.data.frame(yaml_file$info)
   return <- info_df
 }
-    
-info_dfs <- lapply(yaml_files, extract_info_df)
 
+#apply the extract_info_df function to every file and then rbind them into 1 big dataframe
+info_dfs <- lapply(yaml_files, extract_info_df)
 combined_info_df <- rbind_all(info_dfs)
+
+
 
 #### deal with the ball-by-ball data from each match
 
