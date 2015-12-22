@@ -47,7 +47,7 @@ get_filename <- function(filepath){
 #for these purposes we are only interested in the $info part of each file
 extract_info_df <- function(yaml_file){
   # this function takes the $info part of the file and turns it into a dataframe
-  info_df <- as.data.frame(yaml_file$info)
+  info_df <- as.data.frame(yaml_file$info, stringsAsFactors = FALSE)
   
   #add the filename as an id variable and call it a match_id
   match_id <- yaml_file$match_id
@@ -108,7 +108,18 @@ check_neutral <- function(home_away){
 
 combined_info_df <- combined_info_df %>%
     group_by(match_id) %>%
-    mutate(home_away1 = check_neutral(home_away))
+    mutate(home_away1 = check_neutral(home_away)) %>%
+    select(-home_away) %>%
+    rename(home_away = home_away1)
+
+#the umpire data is untidy, because it sort of implies that the umpire belongs to one of the teams, it doesn't so separate
+# it out and remove from the main data frame, we'll then call this the matches_df
+umpires_info <- combined_info_df %>%
+    select(match_id, umpires)
+
+matches_df <- combined_info_df %>%
+    select(-umpires)
+
 
 
 #### deal with the ball-by-ball data from each match
@@ -127,7 +138,7 @@ process_delivery <- function(delivery_list){
   
   
   #convert to dataframe
-  delivery_df <- as.data.frame(delivery_list)
+  delivery_df <- as.data.frame(delivery_list, stringsAsFactors = FALSE)
   
   # get the current column headings
   col_names <- colnames(delivery_df)
