@@ -94,9 +94,21 @@ combined_info_df <- combined_info_df %>%
     mutate(home_away = ifelse(country == teams, "home", "away"))
 
 # but if both teams are away then in reality they are both neutral
+
+check_neutral <- function(home_away){
+  #this function takes a vector of 2 entries and if both are "away" changes them to neutral
+  
+  if (home_away[1] == "away" && home_away[2] == "away"){
+    return <- c("neutral", "neutral")
+  } else{
+    return <- home_away
+  }
+  
+}
+
 combined_info_df <- combined_info_df %>%
     group_by(match_id) %>%
-    mutate
+    mutate(home_away1 = check_neutral(home_away))
 
 
 #### deal with the ball-by-ball data from each match
