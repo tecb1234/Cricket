@@ -1,0 +1,35 @@
+---
+title: "T20 Match Analysis"
+author: "T Baynes"
+date: "December 22, 2015"
+output: html_document
+---
+
+This is my first experiment with uing R Markdown.
+
+First lets run the code that processes all the raw files from Cricsheet:
+
+```{r, message = FALSE, error = FALSE, warning = FALSE}
+source("process_cricsheet.R")
+```
+
+Then lets do some calculations to work out the win, losses, no results and ties for each team:
+
+```{r}
+team_summary <- matches_df %>%
+    group_by(teams) %>%
+    summarise(games = length(teams),
+              wins = sum(outcome.winner==teams, na.rm = TRUE),
+              losses = sum(outcome.winner!= teams, na.rm = TRUE) - sum(is.na(outcome.winner), na.rm = TRUE),
+              no_result = sum(result == "no result", na.rm = TRUE),
+              tie = sum(outcome.result == "tie", na.rm= TRUE))
+
+team_summary
+```
+
+And maybe a plot:
+
+```{r}
+
+ggplot(team_summary, aes(x = teams, y = wins)) + geom_bar(stat = "identity")
+```
