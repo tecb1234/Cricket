@@ -4,6 +4,7 @@ library(tidyr)
 library(plyr)
 library(dplyr)
 library(stringr)
+library(ggmap)
 
 data <- yaml.load_file("C:/Users/Thomas/Documents/Analysis/Cricket/Cricsheet data/630951.yaml")
 
