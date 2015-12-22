@@ -53,7 +53,7 @@ extract_info_df <- function(yaml_file){
   match_id <- yaml_file$match_id
   match_id_col <- rep(match_id, nrow(info_df))
   info_df <- cbind(match_id_col, info_df)
-  rename(info_df, match_id = match_id_col)
+  info_df <- rename(info_df, match_id = match_id_col)
   return <- info_df
 }
 
