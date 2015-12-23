@@ -33,3 +33,41 @@ And maybe a plot:
 
 ggplot(team_summary, aes(x = teams, y = wins)) + geom_bar(stat = "identity")
 ```
+
+But that plot looks pretty hideous, let's try and sort it out.  First lets order the bars and fix the x axis labels.
+
+```{r}
+team_summary$teams <- factor(team_summary$teams, levels = team_summary$teams[order(team_summary$wins, decreasing = TRUE)])
+ggplot(team_summary, aes( x = teams, y = wins)) + geom_bar(stat = "identity") +
+  theme(axis.title.x = element_blank(),
+        axis.text.x  = element_text(angle=90, vjust=0.3, hjust = 1, size=10))
+```
+
+That's a lot better, but I don't like the standard colours, so let's go for `theme_bw()` and change the bar colour to blue.
+
+```{r}
+ggplot(team_summary, aes( x = teams, y = wins)) + geom_bar(stat = "identity", fill = "Blue") +
+  theme_bw() +
+  theme(axis.title.x = element_blank(),
+        axis.text.x  = element_text(angle=90, vjust=0.3, hjust = 1, size=10))
+```
+
+Much, better, but it's still hard to read the axis labels, let's go for horizontal bars.
+
+```{r}
+ggplot(team_summary, aes( x = teams, y = wins)) + geom_bar(stat = "identity", fill = "Blue") +
+  theme_bw() +
+  theme(axis.title.x = element_blank()) +
+  coord_flip()
+```
+
+Hmm, now the bars are the wrong way around, so we'll have to reorder the levels of the teams again
+
+```{r}
+team_summary$teams <- factor(team_summary$teams, levels = team_summary$teams[order(team_summary$wins, decreasing = FALSE)])
+ggplot(team_summary, aes( x = teams, y = wins)) + geom_bar(stat = "identity", fill = "Blue") +
+  theme_bw() +
+  theme(axis.title.x = element_blank()) +
+  coord_flip()
+  
+
