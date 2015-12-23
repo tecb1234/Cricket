@@ -35,9 +35,23 @@ q <- ggplot(team_summary, aes( x = teams, y = wins)) + geom_bar(stat = "identity
 q
 
 
-ggplot(team_summary) + 
-  geom_bar(aes(x = teams, y = wins), stat = "identity", fill = "Green") +
-  geom_bar(aes(x = teams, y = losses), stat = "identity", fill = "Red") +
-  coord_flip() +
-  facet_wrap(~teams)
+team_summary_tidy <- team_summary %>%
+  select(-games) %>%
+  gather(outcome, number, -teams) %>%
+  arrange(teams)
+
+ggplot(team_summary_tidy) + 
+  geom_bar(aes(x = outcome, y = number), stat = "identity", fill = "Blue") +
+  theme_bw() +
+  theme(axis.title.x = element_blank(),
+        axis.text.x  = element_text(angle=90, vjust=0.3, hjust = 1, size=10)) +
+  facet_wrap(~teams, ncol = 6)
+
+
+
+
+test_team_summary_tidy <- team_summary_tidy %>%
+  filter(teams %in% c("England", "Australia", "India", "Pakistan", "South Africa", "Sri Lanka",
+                      "New Zealand", "West Indies", "Bangladesh", "Zimbabwe"))
+
  
