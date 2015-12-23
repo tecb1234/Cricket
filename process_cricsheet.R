@@ -5,6 +5,7 @@ library(plyr)
 library(dplyr)
 library(stringr)
 library(ggmap)
+library(ggplot2)
 
 data <- yaml.load_file("C:/Users/Thomas/Documents/Analysis/Cricket/Cricsheet data/630951.yaml")
 
