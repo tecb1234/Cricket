@@ -3,6 +3,7 @@ library(tidyr)
 
 library(plyr)
 library(dplyr)
+library(tidyr)
 library(stringr)
 library(ggmap)
 library(ggplot2)
