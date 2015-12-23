@@ -57,7 +57,7 @@ Much, better, but it's still hard to read the axis labels, let's go for horizont
 ```{r}
 ggplot(team_summary, aes( x = teams, y = wins)) + geom_bar(stat = "identity", fill = "Blue") +
   theme_bw() +
-  theme(axis.title.x = element_blank()) +
+  theme(axis.title.y = element_blank()) +
   coord_flip()
 ```
 
@@ -69,5 +69,45 @@ ggplot(team_summary, aes( x = teams, y = wins)) + geom_bar(stat = "identity", fi
   theme_bw() +
   theme(axis.title.x = element_blank()) +
   coord_flip()
-  
+```
+
+What about a facetted plot showing wins and losses? First we will need to rearrange the `team_summary` dataframe into a tidy format.
+
+```{r}
+team_summary_tidy <- team_summary %>%
+  select(-games) %>%
+  gather(outcome, number, -teams) %>%
+  arrange(teams)
+
+head(team_summary_tidy)
+
+```
+
+Now we have the data in a tidy format it's much easier to do cleverer stuff in ggplot.
+
+```{r}
+ggplot(team_summary_tidy) + 
+  geom_bar(aes(x = outcome, y = number), stat = "identity", fill = "Blue") +
+  theme_bw() +
+  theme(axis.title.x = element_blank(),
+        axis.text.x  = element_text(angle=90, vjust=0.3, hjust = 1, size=10)) +
+  facet_wrap(~teams, ncol = 6)
+```
+
+
+And maybe we're only interested in the test playing nations.
+
+```{r}
+test_team_summary_tidy <- team_summary_tidy %>%
+  filter(teams %in% c("England", "Australia", "India", "Pakistan", "South Africa", "Sri Lanka",
+                      "New Zealand", "West Indies", "Bangladesh", "Zimbabwe"))
+
+ggplot(test_team_summary_tidy) + 
+  geom_bar(aes(x = outcome, y = number), stat = "identity", fill = "Blue") +
+  theme_bw() +
+  theme(axis.title.x = element_blank(),
+        axis.text.x  = element_text(angle=90, vjust=0.3, hjust = 1, size=10)) +
+  facet_wrap(~teams, ncol = 5)
+```
+
 
