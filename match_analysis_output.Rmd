@@ -71,9 +71,10 @@ ggplot(team_summary, aes( x = teams, y = wins)) + geom_bar(stat = "identity", fi
   coord_flip()
 ```
 
-What about a facetted plot showing wins and losses? First we will need to rearrange the `team_summary` dataframe into a tidy format.
+What about a facetted plot showing wins and losses? First we will need to rearrange the `team_summary` dataframe into a tidy format, after reordering the levels of teams again.
 
 ```{r}
+team_summary$teams <- factor(team_summary$teams, levels = team_summary$teams[order(team_summary$wins, decreasing = TRUE)])
 team_summary_tidy <- team_summary %>%
   select(-games) %>%
   gather(outcome, number, -teams) %>%
