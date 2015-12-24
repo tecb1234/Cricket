@@ -167,7 +167,13 @@ process_innings <- function(innings_list){
   # this function applies to the process_delviery function to each delivery list in an innings
   # and joins all of the single row dataframes into one dataframe for the whole innings
   innings_df <- lapply(innings_list[[1]]$deliveries, process_delivery)
+  
   innings_df <- rbind_all(innings_df)
+  
+  #add a column with who is batting
+  batting_side <- innings_list[[1]]$team
+  batting_side_df <- data.frame(batting_side = rep(batting_side, length(innings_list[[1]]$deliveries)))
+  innings_df <- cbind(batting_side_df, innings_df)
   return <- innings_df
 }
 
