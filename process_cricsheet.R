@@ -150,8 +150,8 @@ process_delivery <- function(delivery_list){
   # split the column headings up so that we can access the over and ball data
   split_col_name <- str_split(col_names, pattern='\\.')  
   
-  over <- data.frame(over = split_col_name[[1]][1])
-  ball <- data.frame(ball = split_col_name[[1]][2])
+  over <- data.frame(over = rep(split_col_name[[1]][1], nrow(delivery_df)))
+  ball <- data.frame(ball = rep(split_col_name[[1]][2], nrow(delivery_df)))
   
   #strip off the over and ball, i.e everything before the second dot, and update the df column headings
   col_names <- lapply(split_col_name, clean_col_names)
@@ -172,7 +172,7 @@ process_innings <- function(innings_list){
   
   #add a column with who is batting
   batting_side <- innings_list[[1]]$team
-  batting_side_df <- data.frame(batting_side = rep(batting_side, length(innings_list[[1]]$deliveries)))
+  batting_side_df <- data.frame(batting_side = rep(batting_side, nrow(innings_df)))
   innings_df <- cbind(batting_side_df, innings_df)
   return <- innings_df
 }
