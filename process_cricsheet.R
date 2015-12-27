@@ -180,7 +180,7 @@ process_innings <- function(innings_list){
 process_match <- function(yaml_file) {
   #This function applies the process_innings function to each innings in the match 
   # to create a single dataframe and adds a match_id col
-  both_innings_dfs <- lapply(yaml_file$innings, process_innings)
+  both_innings_dfs <- lapply(yaml_file$innings[1:2], process_innings)
   both_innings_df <- rbind_all(both_innings_dfs)
   
   match_id <- yaml_file$match_id
