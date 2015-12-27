@@ -13,22 +13,18 @@ First lets run the code that processes all the raw files from Cricsheet:
 source("process_cricsheet.R")
 ```
 
-Let's calculate runs, balls faced and strike rate.
+Let's calculate runs, balls faced and strike rate, broken down by whether the performance was in a winning or losing cause.
 ```{r}
-batter_balls_faced <- ball_by_ball_df %>%
-  group_by(batsman, match_id, ball, over) %>%
-  tally() %>%
-  group_by(batsman) %>%
-  summarise(balls_faced = n())
+
 
 batter_summary <- ball_by_ball_df %>%
-  group_by(batsman) %>%
-  summarise(runs = sum(`runs-batsman`)) %>%
-  left_join(batter_balls_faced) %>%
-  mutate(strike_rate = runs / balls_faced)
+  group_by(batsman, batter_wins) %>%
+  summarise(balls_faced = n(),
+            runs = sum(`runs-batsman`)) %>%
+  mutate(strike_rate = runs / balls_faced) 
+
 ```
 
-I need to work out a more elegant way to calculate the balls faced by each batsman, but this does appear to work.
 
 Ok, now some plots
 
@@ -42,4 +38,19 @@ ggplot(batter_summary, aes(x = balls_faced, y = runs)) +
 ```{r}
 ggplot(batter_summary, aes(x = strike_rate, y = runs)) + 
   geom_point() 
+```
+
+Let's break these charts out to separate performances in winning and losing causes
+
+```{r}
+ggplot(batter_summary, aes(x = balls_faced, y = runs)) + 
+  geom_point() +
+  geom_abline(intercept = 0, slope = 1, colour = "Blue") +
+  facet_wrap(~batter_wins)
+```
+
+```{r}
+ggplot(batter_summary, aes(x = strike_rate, y = runs)) + 
+  geom_point() +
+  facet_wrap(~batter_wins)
 ```
