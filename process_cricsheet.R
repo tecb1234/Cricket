@@ -195,4 +195,17 @@ process_match <- function(yaml_file) {
 ball_by_ball_dfs <- lapply(yaml_files, process_match)
 ball_by_ball_df <- rbind_all(ball_by_ball_dfs)
 
+#add 2 columns which show who won.
+
+#first separate the data from the main matches_df
+
+winners <- matches_df %>%
+  select(match_id, outcome.winner) %>%
+  distinct()
+
+ball_by_ball_df <- ball_by_ball_df %>%
+  left_join(winners) %>%
+  mutate(batter_wins = outcome.winner == batting_side,
+         bowler_wins = !(outcome.winner == batting_side))
+
 
