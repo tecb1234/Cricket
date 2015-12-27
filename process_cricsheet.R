@@ -189,11 +189,43 @@ process_match <- function(yaml_file) {
   both_innings_df <- rename(both_innings_df, match_id = match_id_col)
 }
 
-
+check_long_overs <- function(ball_vector) {
+  #There is an error in the raw data where overs that are longer than 10 balls, the 10th ball gets 
+  # called ball 1 again.  This function checks overs to make sure that this doesn't happen
+  
+  # see if there is more than one ball 1
+  ball_vector <- as.numeric(ball_vector)
+  
+  num_ball_ones <- length(ball_vector[ball_vector == 1])
+  
+  if (num_ball_ones > 1){
+    #we potentially have a problem, but need to check we don't have a double entry no ball
+    if(ball_vector[2] !=1){
+      #we do have a problem
+      ball_vector[ball_vector == 1] <- 10
+      ball_vector[1] <- 1
+      if(ball_vector[2] == 10){ball_vector[2] <- 1}
+    }
+  }
+  return <- ball_vector
+}
 #so now lets do get a massive dataframe with the ball by ball data for each match
 
 ball_by_ball_dfs <- lapply(yaml_files, process_match)
 ball_by_ball_df <- rbind_all(ball_by_ball_dfs)
+
+
+# clean up the data to sort out the issue where the 10th ball of the over gets called the 1st again
+
+ball_by_ball_df <- ball_by_ball_df %>%
+  group_by(match_id, batting_side, over) %>%
+  mutate(ball1 = check_long_overs(ball)) %>%
+  select(-ball) %>%
+  rename(ball = ball1)
+
+  
+# and then reorder
+ball_by_ball_df <- ball_by_ball_df[c(1:3, length(ball_by_ball_df), 4:(length(ball_by_ball_df)-1))]
 
 #add 2 columns which show who won.
 

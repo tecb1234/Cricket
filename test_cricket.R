@@ -23,7 +23,9 @@ test_that("home, away and neutral manipulations",{
 test_that("clean col names", {
   type1 <- c("0", "1", "batsman")
   type2 <- c("0", "1", "runs", "batsman")
+  type3 <- c("0", "10", "batsman")
   
   expect_equal("batsman", clean_col_names(type1))
   expect_equal("runs-batsman", clean_col_names(type2))
+  expect_equal("batsman", clean_col_names(type3))
 })
