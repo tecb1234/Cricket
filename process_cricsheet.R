@@ -233,11 +233,18 @@ ball_by_ball_df <- ball_by_ball_df[c(1:3, length(ball_by_ball_df), 4:(length(bal
 
 winners <- matches_df %>%
   select(match_id, outcome.winner) %>%
-  distinct()
+  distinct(match_id)
 
 ball_by_ball_df <- ball_by_ball_df %>%
   left_join(winners) %>%
   mutate(batter_wins = outcome.winner == batting_side,
          bowler_wins = !(outcome.winner == batting_side))
+
+#and for the moment I don't think I really care about the fielders in runouts, so lets just get a dataframe
+# where there is one row per ball
+
+ball_by_ball_df <- ball_by_ball_df %>%
+  select(-`wicket-fielders`) %>%
+  distinct(match_id, batting_side, over, ball)
 
 
