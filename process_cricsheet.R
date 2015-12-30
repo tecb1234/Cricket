@@ -63,29 +63,7 @@ extract_info_df <- function(yaml_file){
 info_dfs <- lapply(yaml_files, extract_info_df)
 combined_info_df <- rbind_all(info_dfs)
 
-
-
-#work out the country from the city
-# need to be slightly clever about it, as the API call takes ages
-# so work out the list of cities, do the API call on those and join back in
-
-cities_raw <- combined_info_df %>%
-  select(city) %>%
-  distinct(city) %>%
-  filter(!is.na(city)) %>%
-  mutate(country = as.character(geocode(city, output = "more")$country))
-
-#manually do Mirpur because that isn't on google list
-cities_revised <- cities_raw %>%
-  mutate(revised_country = ifelse(city == "Mirpur", "Bangladesh", country)) %>%
-  select(-country) %>%
-  rename(country = revised_country)
-
-#Change the UK ones to find the Leve1 Admin Area i.e England or Scotland
-cities_revised <- cities_revised %>%
-  mutate(revised_country = ifelse(country == "United Kingdom", as.character(geocode(city, output = "more")$administrative_area_level_1), country)) %>%
-  select(-country) %>%
-  rename(country = revised_country)
+if(!exists("cities_revised")) {load("cities.RData")}
 
 combined_info_df <- cities_revised %>%
     left_join(combined_info_df)
