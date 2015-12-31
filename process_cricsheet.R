@@ -225,4 +225,28 @@ ball_by_ball_df <- ball_by_ball_df %>%
   select(-`wicket-fielders`) %>%
   distinct(match_id, batting_side, over, ball)
 
+# I want to work out which wicket/partnership was going on
+get_wickets <- function(wicket_kind) {
+  if(length(wicket_kind == 1)){wickets <- 1}
+  else{
+    
+    wickets <- rep(1, length(wicket_kind))
+    for (ball in 1:(length(wicket_kind)-1)){
+      if(is.na(wicket_kind[ball])){
+        #no wicket
+        wickets[ball+1] <- wickets[ball]
+      }else{
+        #wicket
+        wickets[ball+1] <- wickets[ball] +1
+      }
+      
+    }
+  }
+  return <- wickets
+}
+
+ball_by_ball_df <- ball_by_ball_df %>%
+  group_by(match_id, batting_side) %>%
+  mutate(wicket = get_wickets(`wicket-kind`))
+
 save(ball_by_ball_df, file = "ball_by_ball.RData")

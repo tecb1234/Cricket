@@ -29,3 +29,20 @@ test_that("clean col names", {
   expect_equal("runs-batsman", clean_col_names(type2))
   expect_equal("batsman", clean_col_names(type3))
 })
+
+test_that("wicket calculations", {
+  single_no_wicket <- c(NA)
+  single_wicket <- c("caught")
+  
+  expect_equal(1, get_wickets(single_no_wicket))
+  expect_equal(1, get_wickets(single_wicket))
+  
+  test1 <- c(NA, NA, "caught")
+  test2 <- c(NA, "caught", NA)
+  test3 <- c("caught", NA, NA)
+  test4 <- c(NA, "caught", "caught", NA)
+  expect_equal(c(1,1,1), get_wickets(test1))
+  expect_equal(c(1,1,2), get_wickets(test2))
+  expect_equal(c(1,2,2), get_wickets(test3))
+  expect_equal(c(1,1,2,3), get_wickets(test4))
+})
