@@ -7,10 +7,14 @@ output: html_document
 
 Let's do some analysis on batting statistics.
 
-First lets run the code that processes all the raw files from Cricsheet:
+First load some R packages and the dataframes of match data that we processed from cricsheet.org using `source("process_cricheet.R")`:
 
 ```{r, message = FALSE, error = FALSE, warning = FALSE}
-source("process_cricsheet.R")
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+load("matches.RData")
+load("ball_by_ball.RData")
 ```
 
 Let's calculate runs, balls faced and strike rate, broken down by whether the performance was in a winning or losing cause.

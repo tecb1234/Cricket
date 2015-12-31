@@ -99,7 +99,7 @@ umpires_info <- combined_info_df %>%
 matches_df <- combined_info_df %>%
     select(-umpires)
 
-
+save(matches_df, file = "matches.RData")
 
 #### deal with the ball-by-ball data from each match
 
@@ -225,4 +225,4 @@ ball_by_ball_df <- ball_by_ball_df %>%
   select(-`wicket-fielders`) %>%
   distinct(match_id, batting_side, over, ball)
 
-
+save(ball_by_ball_df, file = "ball_by_ball.RData")

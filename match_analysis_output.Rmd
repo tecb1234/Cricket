@@ -7,10 +7,14 @@ output: html_document
 
 This is my first experiment with uing R Markdown.
 
-First lets run the code that processes all the raw files from Cricsheet:
+First load some R packages and the dataframes of match data that we processed from cricsheet.org using `source("process_cricheet.R")`:
 
 ```{r, message = FALSE, error = FALSE, warning = FALSE}
-source("process_cricsheet.R")
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+load("matches.RData")
+load("ball_by_ball.RData")
 ```
 
 Then lets do some calculations to work out the win, losses, no results and ties for each team:

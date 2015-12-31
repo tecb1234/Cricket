@@ -1,6 +1,7 @@
 library(shiny)
 
-source("process_cricsheet.R")
+load("matches.RData")
+load("ball_by_ball.RData")
 source("partnership_networks.R")
 
 # Define a server for the Shiny app

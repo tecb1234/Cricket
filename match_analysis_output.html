@@ -69,8 +69,12 @@ img {
 
 
 <p>This is my first experiment with uing R Markdown.</p>
-<p>First lets run the code that processes all the raw files from Cricsheet:</p>
-<pre class="r"><code>source(&quot;process_cricsheet.R&quot;)</code></pre>
+<p>First load some R packages and the dataframes of match data that we processed from cricsheet.org using <code>source(&quot;process_cricheet.R&quot;)</code>:</p>
+<pre class="r"><code>library(dplyr)
+library(tidyr)
+library(ggplot2)
+load(&quot;matches.RData&quot;)
+load(&quot;ball_by_ball.RData&quot;)</code></pre>
 <p>Then lets do some calculations to work out the win, losses, no results and ties for each team:</p>
 <pre class="r"><code>team_summary &lt;- matches_df %&gt;%
     group_by(teams) %&gt;%
