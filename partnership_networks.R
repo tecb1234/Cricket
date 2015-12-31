@@ -1,6 +1,10 @@
 ## Partnerships
 
 library(networkD3)
+library(dplyr)
+
+load("ball_by_ball.RData")
+load("matches.RData")
 
 batsman_at_crease <- ball_by_ball_df %>%
   gather(batting_role, batter, -c(1:4, 6, 8:length(ball_by_ball_df))) %>%
@@ -42,3 +46,17 @@ countries <- batsman_at_crease %>%
 #              Target = "non_striker_node_key", 
 #              Group = "Group", 
 #              Value = "runs_total")
+
+combined_partnerships <- partnerships_by_match %>%
+  ungroup() %>%
+  mutate(batter1 = ifelse(batsman < non_striker, batsman, non_striker),
+         batter2 = ifelse(batsman < non_striker, non_striker, batsman)) %>%
+  group_by(match_id, batter1, batter2) %>%
+  summarise(batting_side = first(batting_side),
+            balls_faced = sum(balls_faced),
+            runs_total = sum(runs_total),
+            runs_batsman = sum(runs_batsman),
+            runs_extras = sum(runs_extras),
+            strike_rate = runs_total / balls_faced) %>%
+  ungroup() %>%
+  arrange(desc(runs_total) ) 
