@@ -14,7 +14,8 @@ batsman_at_crease <- ball_by_ball_df %>%
 
 partnerships_by_match <- ball_by_ball_df %>%
   group_by(match_id, batting_side, batsman, non_striker) %>%
-  summarise(balls_faced = n(),
+  summarise(wicket = first(wicket),
+            balls_faced = n(),
             runs_total = sum(`runs-total`),
             runs_batsman = sum(`runs-batsman`),
             runs_extras = sum(`runs-extras`))
@@ -53,10 +54,13 @@ combined_partnerships <- partnerships_by_match %>%
          batter2 = ifelse(batsman < non_striker, non_striker, batsman)) %>%
   group_by(match_id, batter1, batter2) %>%
   summarise(batting_side = first(batting_side),
+            wicket = first(wicket), 
             balls_faced = sum(balls_faced),
             runs_total = sum(runs_total),
             runs_batsman = sum(runs_batsman),
             runs_extras = sum(runs_extras),
             strike_rate = runs_total / balls_faced) %>%
   ungroup() %>%
-  arrange(desc(runs_total) ) 
+  arrange(desc(runs_total)) 
+
+
