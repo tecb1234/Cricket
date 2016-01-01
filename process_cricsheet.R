@@ -31,7 +31,7 @@ get_filename <- function(filepath){
   #position of '.'
   dot_pos <- str_locate(filepath, '\\.')[[1]]
   
-  return <- str_sub(filepath, slash_pos + 1, dot_pos-1)
+  return <- as.integer(str_sub(filepath, slash_pos + 1, dot_pos-1))
   
 }
 get_yaml_file <- function(filepath){
@@ -52,7 +52,7 @@ extract_info_df <- function(yaml_file){
   
   #add the filename as an id variable and call it a match_id
   match_id <- yaml_file$match_id
-  match_id_col <- rep(match_id, nrow(info_df))
+  match_id_col <- as.integer(rep(match_id, nrow(info_df)))
   info_df <- cbind(match_id_col, info_df)
   info_df <- rename(info_df, match_id = match_id_col)
   return <- info_df
@@ -128,8 +128,8 @@ process_delivery <- function(delivery_list){
   # split the column headings up so that we can access the over and ball data
   split_col_name <- str_split(col_names, pattern='\\.')  
   
-  over <- data.frame(over = rep(split_col_name[[1]][1], nrow(delivery_df)))
-  ball <- data.frame(ball = rep(split_col_name[[1]][2], nrow(delivery_df)))
+  over <- data.frame(over = as.integer(rep(split_col_name[[1]][1], nrow(delivery_df))))
+  ball <- data.frame(ball = as.integer(rep(split_col_name[[1]][2], nrow(delivery_df))))
   
   #strip off the over and ball, i.e everything before the second dot, and update the df column headings
   col_names <- lapply(split_col_name, clean_col_names)
@@ -150,7 +150,7 @@ process_innings <- function(innings_list){
   
   #add a column with who is batting
   batting_side <- innings_list[[1]]$team
-  batting_side_df <- data.frame(batting_side = rep(batting_side, nrow(innings_df)))
+  batting_side_df <- data.frame(batting_side = rep(batting_side, nrow(innings_df)), stringsAsFactors = FALSE)
   innings_df <- cbind(batting_side_df, innings_df)
   return <- innings_df
 }
