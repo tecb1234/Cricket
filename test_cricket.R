@@ -46,3 +46,13 @@ test_that("wicket calculations", {
   expect_equal(c(1,2,2), get_wickets(test3))
   expect_equal(c(1,1,2,3), get_wickets(test4))
 })
+
+test_that("bowling side", {
+  teams <- c("England", "Australia")
+  batting_side1 <- c("England", "England")
+  batting_side2 <- c("Australia", "Australia")
+  
+  expect_equal(c("Australia", "Australia"), get_bowling_side(batting_side1, teams))
+  expect_equal(c("England", "England"), get_bowling_side(batting_side2, teams))
+  
+})

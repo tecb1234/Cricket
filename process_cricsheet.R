@@ -155,6 +155,12 @@ process_innings <- function(innings_list){
   return <- innings_df
 }
 
+get_bowling_side <- function(batting_side, teams) {
+  #this function, works out the bowling side by working out which side isn't the batting side
+  
+  return <- rep(teams[batting_side[[1]] != teams], length(batting_side))
+}
+
 process_match <- function(yaml_file) {
   #This function applies the process_innings function to each innings in the match 
   # to create a single dataframe and adds a match_id col
@@ -165,6 +171,9 @@ process_match <- function(yaml_file) {
   match_id_col <- rep(match_id, nrow(both_innings_df))
   both_innings_df <- cbind(match_id_col, both_innings_df)
   both_innings_df <- rename(both_innings_df, match_id = match_id_col)
+  both_innings_df <- both_innings_df %>%
+    group_by(batting_side) %>%
+    mutate(bowling_side = get_bowling_side(batting_side, yaml_file$info$teams))
 }
 
 check_long_overs <- function(ball_vector) {
@@ -206,7 +215,6 @@ ball_by_ball_df <- ball_by_ball_df %>%
 ball_by_ball_df <- ball_by_ball_df[c(1:3, length(ball_by_ball_df), 4:(length(ball_by_ball_df)-1))]
 
 #add 2 columns which show who won.
-
 #first separate the data from the main matches_df
 
 winners <- matches_df %>%
