@@ -227,7 +227,7 @@ ball_by_ball_df <- ball_by_ball_df %>%
 
 # I want to work out which wicket/partnership was going on
 get_wickets <- function(wicket_kind) {
-  if(length(wicket_kind == 1)){wickets <- 1}
+  if(length(wicket_kind) == 1){wickets <- 1}
   else{
     
     wickets <- rep(1, length(wicket_kind))
