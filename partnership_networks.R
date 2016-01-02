@@ -13,7 +13,7 @@ batsman_at_crease <- ball_by_ball_df %>%
 #batsman_at_crease <- batsman_at_crease[c(1:5,length(batsman_at_crease)-1,length(batsman_at_crease),6:length(batsman_at_crease)-2)]
 
 partnerships_by_match <- ball_by_ball_df %>%
-  group_by(match_id, batting_side, batsman, non_striker) %>%
+  group_by(match_id, batting_side, bowling_side, batsman, non_striker) %>%
   summarise(wicket = first(wicket),
             balls_faced = n(),
             runs_total = sum(`runs-total`),
@@ -54,6 +54,7 @@ combined_partnerships <- partnerships_by_match %>%
          batter2 = ifelse(batsman < non_striker, non_striker, batsman)) %>%
   group_by(match_id, batter1, batter2) %>%
   summarise(batting_side = first(batting_side),
+            bowling_side = first(bowling_side),
             wicket = first(wicket), 
             balls_faced = sum(balls_faced),
             runs_total = sum(runs_total),
@@ -62,5 +63,23 @@ combined_partnerships <- partnerships_by_match %>%
             strike_rate = runs_total / balls_faced) %>%
   ungroup() %>%
   arrange(desc(runs_total)) 
+
+england <- combined_partnerships %>%
+  filter(batting_side == "England") %>%
+  filter(bowling_side %in% c("Australia",
+                              "India",
+                              "New Zealand",
+                              "Pakistan",
+                              "South Africa",
+                              "Sri Lanka",
+                              "West Indies",
+                              "Zimbabwe"))
+
+ggplot(england, aes(x = balls_faced, y = runs_total)) + 
+  theme_bw() +
+  geom_abline(intercept = 0, slope = 1) +
+  geom_point(colour = "Blue") +
+  facet_wrap(~bowling_side, ncol =4)
+
 
 
