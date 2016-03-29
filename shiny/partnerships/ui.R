@@ -2,7 +2,9 @@ library(shiny)
 
 # load("matches.RData")
 # load("ball_by_ball.RData")
-source("partnership_networks.R")
+# source("partnership_networks.R")
+
+source("partnerships_shiny_helper.R")
 
 # Define the overall UI
 shinyUI(

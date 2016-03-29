@@ -4,8 +4,8 @@ library(networkD3)
 library(tidyr)
 library(dplyr)
 
-load("matches.RData")
-load("ball_by_ball.RData")
+# load("matches.RData")
+# load("ball_by_ball.RData")
 
 batsman_at_crease <- ball_by_ball_df %>%
   gather(batting_role, batter, -c(1:4, 6, 8:length(ball_by_ball_df))) %>%

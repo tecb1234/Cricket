@@ -20,6 +20,7 @@ shinyServer(function(input, output, session) {
   })
   
   nodes_df_to_plot <- reactive({
+    
     return <- batsman_at_crease %>%
       select(batting_side, batter, match_id) %>%
       filter(batting_side == input$country) %>%
@@ -27,6 +28,7 @@ shinyServer(function(input, output, session) {
       distinct(batter) %>%
       mutate(node_key = 0:(n()-1)) %>%
       mutate(Group = rep(1,n()))
+    
   })
   
   links_df_to_plot <- reactive({
