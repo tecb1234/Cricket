@@ -19,7 +19,7 @@ shinyUI(
       # Define the sidebar with one input
       sidebarPanel(
         selectInput("country", "Choose Country", 
-                    choices=countries),
+                    choices = countries$batting_side),
         
         selectInput("match_ID", "choose match",
                     choices = c(1,2)),
