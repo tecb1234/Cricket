@@ -1,8 +1,9 @@
 library(shiny)
 
-load("matches.RData")
-load("ball_by_ball.RData")
-source("partnership_networks.R")
+# load("matches.RData")
+# load("ball_by_ball.RData")
+# source("partnership_networks.R")
+
 
 # Define a server for the Shiny app
 shinyServer(function(input, output, session) {

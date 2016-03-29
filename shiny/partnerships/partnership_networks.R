@@ -1,6 +1,11 @@
 ## Partnerships
 
 library(networkD3)
+library(tidyr)
+library(dplyr)
+
+load("matches.RData")
+load("ball_by_ball.RData")
 
 batsman_at_crease <- ball_by_ball_df %>%
   gather(batting_role, batter, -c(1:4, 6, 8:length(ball_by_ball_df))) %>%
@@ -17,6 +22,7 @@ partnerships_by_match <- ball_by_ball_df %>%
 
 countries <- batsman_at_crease %>%
   distinct(batting_side) %>%
+  ungroup() %>%
   select(batting_side)
 
 # england_nodes <- batsman_at_crease %>%
